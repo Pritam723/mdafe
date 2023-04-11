@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { TabMenu } from "primereact/tabmenu";
 import Home from "./dataFetching/Home";
 import Blogs from "./dataFetching/Blogs";
+import ComponentWiseDataFetch from "./dataFetching/ComponentWiseDataFetch";
 import NoPage from "./dataFetching/NoPage";
 import FetchMeterData from "./dataFetching/FetchMeterData";
 import FetchActiveReactive from "./dataFetching/FetchActiveReactive";
@@ -41,16 +42,20 @@ export default function AppWrapperRoutes() {
     //   icon: "pi pi-fw pi-language",
     //   url: "/activeReactiveByNo",
     // },
-
     {
-      label: "Report Generation",
+      label: "Component-wise Data Fetch",
       icon: "pi pi-fw pi-file-pdf",
-      url: "/reportGeneration",
+      url: "/componentWiseData",
     },
     {
       label: "Configuration Files Change Log",
       icon: "pi pi-fw pi-file-edit",
       url: "/cfgLog",
+    },
+    {
+      label: "Report Generation",
+      icon: "pi pi-fw pi-file-pdf",
+      url: "/reportGeneration",
     },
     // {
     //   label: "Necessary Files",
@@ -83,14 +88,16 @@ export default function AppWrapperRoutes() {
               path={"/activeReactiveByID"}
               element={<FetchActiveReactive fetchBy="meterID" />}
             />
-
             <Route
               path={"/activeReactiveByNO"}
               element={<FetchActiveReactive fetchBy="meterNO" />}
+            />{" "}
+            <Route
+              path={"/componentWiseData"}
+              element={<ComponentWiseDataFetch />}
             />
-
+            <Route path={"/cfgLog"} element={<MasterDataChangeLog />} />{" "}
             <Route path={"/reportGeneration"} element={<Blogs />} />
-            <Route path={"/cfgLog"} element={<MasterDataChangeLog />} />
             {/* <Route path={"/necessaryFiles"} element={<Blogs />} /> */}
             <Route path="*" element={<NoPage />} />
           </Routes>

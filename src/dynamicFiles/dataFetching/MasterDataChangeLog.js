@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import "../../staticFiles/cssFiles/TimelineDemo.css";
 import axios from "axios";
 import { Dialog } from "primereact/dialog";
-// import { ProgressSpinner } from "primereact/progressspinner";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { Dropdown } from "primereact/dropdown";
 import { Divider } from "primereact/divider";
 import { Calendar } from "primereact/calendar";
@@ -14,7 +14,7 @@ import moment from "moment";
 export default function TemplateDemo() {
   const [configChanges, setConfigChanges] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [singleChange, setSingleChnage] = useState(<div></div>);
+  const [singleChange, setSingleChange] = useState(<div></div>);
   const [configType, setConfigType] = useState("masterData");
   const [meters, setMeters] = useState([]);
   const [selectedMeter, setSelectedMeter] = useState({
@@ -69,6 +69,7 @@ export default function TemplateDemo() {
     formData.append("configType", configType);
     formData.append("prevId", prevId);
     formData.append("currId", currId);
+    formData.append("selectedMeter", selectedMeter["code"]);
 
     axios("/compareConfigurations", {
       method: "POST",
@@ -76,8 +77,8 @@ export default function TemplateDemo() {
     })
       .then((response) => {
         //Creates an <a> tag hyperlink that links the excel sheet Blob object to a url for downloading.
-        // setSingleChnage(added);
-        // console.log(response);
+        // setSingleChange(added);
+        console.log(response.data);
         // console.log(response.data.Added);
         // console.log(response.data.Deleted);
 
@@ -119,7 +120,7 @@ export default function TemplateDemo() {
             "No meter was deleted in this configuration as compared to the previous",
           ];
 
-        setSingleChnage(
+        setSingleChange(
           <div>
             <h3>
               Following are the meters which are newly added compared to the
@@ -158,7 +159,7 @@ export default function TemplateDemo() {
       data: formData,
     }).then((result) => {
       setConfigChanges(result.data);
-      // console.log(result.data);
+      console.log(result.data);
     });
   };
 
@@ -198,7 +199,17 @@ export default function TemplateDemo() {
           visible={visible}
           maximizable
           style={{ width: "50vw" }}
-          onHide={() => setVisible(false)}
+          onHide={() => {
+            setSingleChange(
+              <ProgressSpinner
+                style={{ width: "50px", height: "50px" }}
+                strokeWidth="8"
+                fill="var(--surface-ground)"
+                animationDuration=".5s"
+              />
+            );
+            setVisible(false);
+          }}
         >
           {/* <p className="m-0">{singleChange}</p> */}
           {singleChange}
@@ -206,11 +217,13 @@ export default function TemplateDemo() {
 
         <Card title={item.status} subTitle={item.dateInfo}>
           {item.configDataId != "None" ? (
-            <p>You can download the Configuration for these dates</p>
+            <>
+              <p>You can download the Configuration for these dates</p>{" "}
+              <Button label="Download" className="p-button-text"></Button>
+            </>
           ) : (
             <p>There is no Configuration for these dates</p>
           )}
-          <Button label="Download" className="p-button-text"></Button>
 
           {item.index != 0 ? (
             <Button
@@ -273,6 +286,7 @@ export default function TemplateDemo() {
               setSelectedMeter(e.value);
               setConfigChanges([]);
             }}
+            filter={true}
             options={meters}
             optionLabel="name"
             placeholder="Select Configuration"
