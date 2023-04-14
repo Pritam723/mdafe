@@ -5,6 +5,7 @@ import { Dropdown } from "primereact/dropdown";
 import moment from "moment";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
+import PlotlyComponent from "../plotting/PlotlyComponent";
 
 const ComponentWiseDataFetch = () => {
   const [meterType, setMeterType] = useState("Real Meters");
@@ -19,8 +20,8 @@ const ComponentWiseDataFetch = () => {
   });
   const [endDateTime, setEndDateTime] = useState(() => {
     let time = moment().toDate(); // This will return a copy of the Date that the moment uses
-    time.setHours(23);
-    time.setMinutes(45);
+    time.setHours(0);
+    time.setMinutes(0);
     time.setSeconds(0);
     return time;
   });
@@ -28,6 +29,8 @@ const ComponentWiseDataFetch = () => {
     "Real Meters": [],
     "Fictitious Meters": [],
   });
+  const [fetchDataTrigger, setFetchDataTrigger] = useState(false);
+  const [isFetching, setFetching] = useState(false);
 
   const meterTypes = [
     { name: "Real Meters", code: "Real Meters", value: "Real Meters" },
@@ -37,6 +40,14 @@ const ComponentWiseDataFetch = () => {
       value: "Fictitious Meters",
     },
   ];
+
+  const fetchComponentWiseData = () => {
+    console.log("already called");
+    setFetching(true);
+    // It is made false in the Child Function i.e., PlotlyComponent
+    setFetchDataTrigger(!fetchDataTrigger);
+  };
+
   useEffect(() => {
     fetch("/getMetersListed/" + "meterID")
       .then((res) => res.json())
@@ -103,9 +114,9 @@ const ComponentWiseDataFetch = () => {
                   console.log(moment(e.value));
                   setStartDateTime(e.value);
                 }}
-                showTime
-                hourFormat="24"
-                stepMinute={15}
+                // showTime
+                // hourFormat="24"
+                // stepMinute={15}
                 dateFormat="dd/mm/yy"
                 // locale="en-IN"
                 // showIcon
@@ -124,9 +135,9 @@ const ComponentWiseDataFetch = () => {
                 id="calendar-24h"
                 value={endDateTime}
                 onChange={(e) => setEndDateTime(e.value)}
-                showTime
-                hourFormat="24"
-                stepMinute={15}
+                // showTime
+                // hourFormat="24"
+                // stepMinute={15}
                 // showIcon
                 dateFormat="dd/mm/yy"
               />
@@ -145,7 +156,7 @@ const ComponentWiseDataFetch = () => {
                 severity="success"
                 rounded
                 onClick={() => {
-                  console.log("To be implemented");
+                  fetchComponentWiseData();
                 }}
               />
             </div>{" "}
@@ -154,9 +165,15 @@ const ComponentWiseDataFetch = () => {
       </div>
       <Divider />
 
-      <div style={{ height: "auto" }}>
-        Plotly Component Here : Under development
-      </div>
+      <PlotlyComponent
+        startDateTime={startDateTime}
+        endDateTime={endDateTime}
+        selectedMeters={[selectedMeter]}
+        fetchDataTrigger={fetchDataTrigger}
+        fetchBy={"meterID"}
+        isFetchingStateChanger={setFetching}
+        fetchDataType="fetchComponentWiseData"
+      />
     </div>
   );
 };
