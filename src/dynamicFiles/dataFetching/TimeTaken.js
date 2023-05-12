@@ -20,7 +20,7 @@ export default function TimeTaken({ timeTaken, setTimeTaken, isFetching }) {
       detail:
         "Data loaded in " +
         timeTaken +
-        " Seconds. For large amount of data, it may take several minutes to load data.",
+        " Seconds. For large amount of data, it may take several minutes to load.",
       life: 5000,
     });
   };

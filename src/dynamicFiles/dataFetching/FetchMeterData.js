@@ -43,7 +43,8 @@ export default function FetchMeterData({ fetchBy }) {
     return time;
   });
   const [fetchDataTrigger, setFetchDataTrigger] = useState(false);
-
+  const [multiplierData, setMultiplierData] = useState({});
+  const [selectedMeterChangeFlag, setSelectedMeterChangeFlag] = useState(false);
   const meterTypes = [
     { name: "Real Meters", code: "Real Meters", value: "Real Meters" },
     {
@@ -76,7 +77,7 @@ export default function FetchMeterData({ fetchBy }) {
   };
 
   const fetchMeterDataInExcel = () => {
-    // console.log("Set fetching");
+    // console.log(multiplierData);
     setFetching(true);
     var formData = new FormData();
     console.log("Creating Form Data");
@@ -89,6 +90,7 @@ export default function FetchMeterData({ fetchBy }) {
       moment(endDateTime).format("DD-MM-YYYY HH:mm:ss")
     );
     formData.append("selectedMeters", JSON.stringify(selectedMeters));
+    formData.append("multiplierData", JSON.stringify(multiplierData));
     formData.append("fetchBy", fetchBy);
 
     axios("/fetchMeterDataInExcel", {
@@ -178,6 +180,8 @@ export default function FetchMeterData({ fetchBy }) {
                         setMeters(allMeters[e.value]);
                       }
                       setSelectedMeters([]);
+                      setSelectedMeterChangeFlag(true);
+                      // setMultiplierData({});
                     }}
                     options={meterTypes}
                     optionLabel="name"
@@ -201,6 +205,8 @@ export default function FetchMeterData({ fetchBy }) {
                     onChange={(e) => {
                       console.log(e.value);
                       setSelectedMeters(e.value);
+                      setSelectedMeterChangeFlag(true);
+                      // setMultiplierData({});
                     }}
                     options={meters}
                     optionLabel="name"
@@ -316,6 +322,10 @@ export default function FetchMeterData({ fetchBy }) {
             fetchDataTrigger={fetchDataTrigger}
             fetchBy={fetchBy}
             isFetchingStateChanger={setFetching}
+            multiplierData={multiplierData}
+            setMultiplierData={setMultiplierData}
+            selectedMeterChangeFlag={selectedMeterChangeFlag}
+            setSelectedMeterChangeFlag={setSelectedMeterChangeFlag}
             fetchDataType="fetchMeterData"
           />
         </div>

@@ -10,7 +10,7 @@ import ComponentWiseDataFetch from "./dataFetching/ComponentWiseDataFetch";
 import NoPage from "./dataFetching/NoPage";
 import FetchMeterData from "./dataFetching/FetchMeterData";
 import FetchActiveReactive from "./dataFetching/FetchActiveReactive";
-import MasterDataChangeLog from "./dataFetching/MasterDataChangeLog";
+import ConfigDataChangeLog from "./dataFetching/ConfigDataChangeLog";
 
 export default function AppWrapperRoutes() {
   // const [activeIndex, setActiveIndex] = useState();
@@ -96,7 +96,7 @@ export default function AppWrapperRoutes() {
               path={"/componentWiseData"}
               element={<ComponentWiseDataFetch />}
             />
-            <Route path={"/cfgLog"} element={<MasterDataChangeLog />} />{" "}
+            <Route path={"/cfgLog"} element={<ConfigDataChangeLog />} />{" "}
             <Route path={"/reportGeneration"} element={<Blogs />} />
             {/* <Route path={"/necessaryFiles"} element={<Blogs />} /> */}
             <Route path="*" element={<NoPage />} />

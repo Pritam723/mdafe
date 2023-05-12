@@ -11,7 +11,7 @@ import { Divider } from "primereact/divider";
 import { Calendar } from "primereact/calendar";
 import moment from "moment";
 
-export default function TemplateDemo() {
+export default function ConfigDataChangeLog() {
   const [configChanges, setConfigChanges] = useState([]);
   const [visible, setVisible] = useState(false);
   const [singleChange, setSingleChange] = useState(<div></div>);
@@ -143,6 +143,42 @@ export default function TemplateDemo() {
       });
   };
 
+  const downloadConfiguration = (configId, startDate, endDate) => {
+    let fileNameMap = {
+      masterData: "MASTER.DAT",
+      fictdatData: "FICTMTRS.DAT",
+      fictcfgData: "FICTMTRS.CFG",
+    };
+
+    var formData = new FormData();
+    console.log("Downloading Configuration Text Data");
+
+    formData.append("configType", configType);
+    formData.append("configId", configId);
+    formData.append("startDate", startDate);
+    formData.append("endDate", endDate);
+
+    axios("/downloadConfiguration", {
+      method: "POST", //Pretty sure you want a GET method but otherwise POST methods can still return something too.
+      responseType: "blob", // important
+      data: formData,
+    })
+      .then((response) => {
+        //Creates an <a> tag hyperlink that links the excel sheet Blob object to a url for downloading.
+        console.log(response);
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        // link.setAttribute("download", `${Date.now()}.xlsx`); //set the attribute of the <a> link tag to be downloadable when clicked and name the sheet based on the date and time right now.
+        link.setAttribute("download", fileNameMap[configType]);
+        document.body.appendChild(link);
+        link.click(); //programmatically click the link so the user doesn't have to
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url); //important for optimization and preventing memory leak even though link element has already been removed. In the case of long running apps that haven't been reloaded many times.
+      })
+      .then(() => {});
+  };
+
   const getConfigurationChangeHistory = () => {
     var formData = new FormData();
 
@@ -219,7 +255,17 @@ export default function TemplateDemo() {
           {item.configDataId != "None" ? (
             <>
               <p>You can download the Configuration for these dates</p>{" "}
-              <Button label="Download" className="p-button-text"></Button>
+              <Button
+                label="Download"
+                onClick={() => {
+                  downloadConfiguration(
+                    item.configDataId,
+                    item.startDate,
+                    item.endDate
+                  );
+                }}
+                className="p-button-text"
+              ></Button>
             </>
           ) : (
             <p>There is no Configuration for these dates</p>

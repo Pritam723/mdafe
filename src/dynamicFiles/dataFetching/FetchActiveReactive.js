@@ -51,6 +51,9 @@ export default function FetchActiveReactive({ fetchBy }) {
   });
   const [fetchDataTrigger, setFetchDataTrigger] = useState(false);
 
+  const [multiplierData, setMultiplierData] = useState({});
+  const [selectedMeterChangeFlag, setSelectedMeterChangeFlag] = useState(false);
+
   const meterTypes = [
     { name: "Real Meters", code: "Real Meters", value: "Real Meters" },
     {
@@ -96,6 +99,7 @@ export default function FetchActiveReactive({ fetchBy }) {
       moment(endDateTime).format("DD-MM-YYYY HH:mm:ss")
     );
     formData.append("selectedMeters", JSON.stringify(selectedMeters));
+    formData.append("multiplierData", JSON.stringify(multiplierData));
     formData.append("fetchBy", fetchBy);
     formData.append("energyType", energyType);
 
@@ -180,6 +184,8 @@ export default function FetchActiveReactive({ fetchBy }) {
                         setMeters(allMeters[e.value]);
                       }
                       setSelectedMeters([]);
+                      setSelectedMeterChangeFlag(true);
+                      // setMultiplierData({});
                     }}
                     options={meterTypes}
                     optionLabel="name"
@@ -203,6 +209,8 @@ export default function FetchActiveReactive({ fetchBy }) {
                     onChange={(e) => {
                       console.log(e.value);
                       setSelectedMeters(e.value);
+                      setSelectedMeterChangeFlag(true);
+                      // setMultiplierData({});
                     }}
                     options={meters}
                     optionLabel="name"
@@ -335,6 +343,10 @@ export default function FetchActiveReactive({ fetchBy }) {
             fetchDataTrigger={fetchDataTrigger}
             fetchBy={fetchBy}
             isFetchingStateChanger={setFetching}
+            multiplierData={multiplierData}
+            setMultiplierData={setMultiplierData}
+            selectedMeterChangeFlag={selectedMeterChangeFlag}
+            setSelectedMeterChangeFlag={setSelectedMeterChangeFlag}
             fetchDataType="fetchActiveReactive"
             energyType={energyType}
           />
