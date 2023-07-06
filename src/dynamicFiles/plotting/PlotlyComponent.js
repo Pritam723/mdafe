@@ -130,35 +130,38 @@ export default function PlotlyComponent({
           // console.log(
           //   "For " + meterID + " value is " + multiplierData[meterID]
           // );
-          if (multiplierData[meterID] === undefined) {
-            multiplierData[meterID] = null;
-          }
-          DialogBody.push(
-            <React.Fragment key={meterID}>
-              <Tag
-                severity={tagColorArray[index % tagColorArray.length]}
-                value={meterID + " : "}
-              ></Tag>
-              {"   "}
-              <InputText
-                key={meterID}
-                defaultValue={multiplierData[meterID]}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  console.log(meterID);
-                  multiplierData[meterID] = e.target.value;
-                  setMultiplierData(multiplierData);
+          if (multiplierData != "Not Required") {
+            if (multiplierData[meterID] === undefined) {
+              multiplierData[meterID] = null;
+            }
 
-                  // console.log(multiplierData);
-                }}
-                keyfilter="int"
-                className="p-inputtext-sm"
-                placeholder="Default multiplier is +1"
-              />
-              <br /> <br />
-            </React.Fragment>
-          );
-          setDialogBody(DialogBody);
+            DialogBody.push(
+              <React.Fragment key={meterID}>
+                <Tag
+                  severity={tagColorArray[index % tagColorArray.length]}
+                  value={meterID + " : "}
+                ></Tag>
+                {"   "}
+                <InputText
+                  key={meterID}
+                  defaultValue={multiplierData[meterID]}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    console.log(meterID);
+                    multiplierData[meterID] = e.target.value;
+                    setMultiplierData(multiplierData);
+
+                    // console.log(multiplierData);
+                  }}
+                  keyfilter="int"
+                  className="p-inputtext-sm"
+                  placeholder="Default multiplier is +1"
+                />
+                <br /> <br />
+              </React.Fragment>
+            );
+            setDialogBody(DialogBody);
+          }
         }
 
         // var trace1 = {
@@ -233,7 +236,8 @@ export default function PlotlyComponent({
       {!selectedMeterChangeFlag &&
       selectedMeters &&
       selectedMeters.length &&
-      selectedMeters[0]["name"] ? (
+      selectedMeters[0]["name"] &&
+      multiplierData != "Not Required" ? (
         <React.Fragment>
           <br />
           <br />

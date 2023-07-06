@@ -5,7 +5,7 @@ import "primeicons/primeicons.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { TabMenu } from "primereact/tabmenu";
 import Home from "./dataFetching/Home";
-import Blogs from "./dataFetching/Blogs";
+import ReportGeneration from "./dataFetching/ReportGeneration";
 import ComponentWiseDataFetch from "./dataFetching/ComponentWiseDataFetch";
 import NoPage from "./dataFetching/NoPage";
 import FetchMeterData from "./dataFetching/FetchMeterData";
@@ -97,7 +97,7 @@ export default function AppWrapperRoutes() {
               element={<ComponentWiseDataFetch />}
             />
             <Route path={"/cfgLog"} element={<ConfigDataChangeLog />} />{" "}
-            <Route path={"/reportGeneration"} element={<Blogs />} />
+            <Route path={"/reportGeneration"} element={<ReportGeneration />} />
             {/* <Route path={"/necessaryFiles"} element={<Blogs />} /> */}
             <Route path="*" element={<NoPage />} />
           </Routes>
